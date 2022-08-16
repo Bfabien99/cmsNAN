@@ -18,21 +18,7 @@
                     <div class="col-xs-6">
 
                         <?php
-                        if (isset($_POST['submit'])) {
-                            $cat_title = mysqli_escape_string($connection, $_POST['cat_title']);
-                            if ($cat_title == "" || empty($cat_title)) {
-                                echo "<h3 class='alert alert-danger'>The field should not be empty!</h3>";
-                            } else {
-                                $query = "INSERT INTO categories (cat_title) VALUES ('$cat_title')";
-                                $insert = mysqli_query($connection, $query);
-
-                                if (!$insert) {
-                                    echo "<h2 class='alert alert-warning'> QUERY EXCECUTION FAILED!</h2>";
-                                } else {
-                                    echo "<h2 class='alert alert-success'>New category added!</h2>";
-                                }
-                            }
-                        }
+                            insert_category();
                         ?>
                         <form action="" method="POST">
                             <div class="form-group">
@@ -43,28 +29,33 @@
                                 <input class="btn btn-primary" type="submit" name="submit" value="Add Category">
                             </div>
                         </form>
+                        <hr>
+                        <form action="" method="POST">
+
+                            <?php
+                                if(isset($_GET['edit'])){
+                                    include('includes/update_category.php');
+                                }
+                                ?>
+                        </form>
                     </div>
 
                     <div class="col-xs-6">
-                        <table class="table table-hover">
+                        <table class="table table-hover table-striped">
                             <thead>
                                 <tr>
                                     <th>Id</th>
                                     <th>Category Title</th>
+                                    <th colspan="2">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                $query = "SELECT * FROM categories";
-                                $select_all_categories_query = mysqli_query($connection, $query);
+                                    findAllCategories();
+                                ?>
 
-                                while ($row = mysqli_fetch_assoc($select_all_categories_query)) {
-                                    echo "<tr>
-                                                <td>{$row['cat_id']}</td>
-                                                <td>{$row['cat_title']}</td>
-                                            </tr>
-                                        ";
-                                }
+                                <?php
+                                    deleteCategory();
                                 ?>
                             </tbody>
                         </table>
