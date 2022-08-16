@@ -13,14 +13,14 @@
         <div class="col-md-8">
 
             <h1 class="page-header">
-                Search result
-                <small>Secondary Text</small>
+                Search result for
+                <small><?php if (isset($_POST['submit'])){echo "'".$_POST['search']."'";} ?></small>
             </h1>
 
             <!-- First Blog Post -->
             <?php
             if (isset($_POST['submit'])) {
-                $search = strip_tags($_POST['search']);
+                $search = mysqli_escape_string($connection,$_POST['search']);
 
                 $query = "SELECT * FROM posts WHERE post_tags LIKE '%$search%' ";
                 $search_query = mysqli_query($connection, $query);
@@ -33,11 +33,7 @@
                 if ($count == 0) {
                     echo "<h3 class='alert alert-danger text-center'>NO RESULT</h3>";
                 } else {
-
-                    $query = "SELECT * FROM posts";
-                    $select_all_posts = mysqli_query($connection, $query);
-
-                    while ($row = mysqli_fetch_assoc($select_all_posts)) {
+                    while ($row = mysqli_fetch_assoc($search_query)) {
             ?>
 
                         <h2>
